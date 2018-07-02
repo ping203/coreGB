@@ -1,0 +1,852 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 2, 2016, 3:50:09 PM
+    Author     : TungTD
+*/
+#taixiu-wrapper{
+    $taixiuImagePath : $twistImagePath + "taixiu/";
+    position : absolute;
+    width: 100%;
+    height : 100%;
+
+    $positionList : (
+        (0, 150),
+        (1, 590),
+        (2, 130),
+        (3, 262.5),
+        (4, 395),
+        (5, 527.5),
+        (6, 660)
+        );
+    @mixin taixiuTextShadow ($color) {  
+        text-shadow: 0 5px 4px rgba(0,0,0, 0.78), 0 0 22px rgba($color, 0.80)
+            , 0 0 5px rgba($color, 0.48), 0 0 8px rgba($color, 0.68);
+        color : white;
+    }
+
+    $colorList : ((#fec52e,fec52e),(#00baff,00baff));
+    @each $color,$colorName  in $colorList {
+        @include keyframes(taixiuBoxShadow#{$colorName}) {
+            0%{
+                box-shadow: 0 0 1px #1c92c4, 0 0 1px #1c92c4;
+                @include  linear-gradient(bottom, rgba(255,238,0,0.05), rgba(255,238,0,0.02));
+            }
+            50%{box-shadow: 0 0 5px #1c92c4, 0 0 10px #1c92c4;
+                @include  linear-gradient(bottom, rgba(255,238,0,0.07), rgba(255,238,0,0.05))}
+            100%{box-shadow: 0 0 1px #1c92c4, 0 0 1px #1c92c4;
+                 @include  linear-gradient(bottom, rgba(255,238,0,0.05), rgba(255,238,0,0.02))}
+        }
+    }
+
+
+    @include keyframes(taixiuBoxShadow) {
+        0%{box-shadow: inset 0 0 5px rgba(255,255,0, 0.3),inset  0 0 10px rgba(255,255,0, 0.3);}
+        50%{box-shadow: inset 0 0 10px rgba(255,255,0, 0.8),inset  0 0 15px rgba(255,255,0, 0.8);}
+        100%{box-shadow: inset 0 0 5px rgba(255,255,0, 0.3),inset  0 0 10px rgba(255,255,0, 0.3);}
+    }
+
+    @each $id, $image in ((0,'three-one'),(1,'three-two'),(2,'three-three'),(3,'dice-group'),(4,'three-four'),(5,'three-five'),(6,'three-six')
+    ,(24,'dice1'),(25,'dice2'),(26,'dice3'),(27,'dice4'),(28,'dice5'),(29,'dice6')){
+        .type-id#{$id}{
+            .name{
+                background-image: url("#{$taixiuImagePath}/#{$image}.png");
+            }
+        }
+    }
+
+    @each $id, $image in ((0,'dice1'),(1,'dice2'),(2,'dice3'),(3,'dice4'),(4,'dice5'),(5,'dice6')){
+        .dice#{$id}{
+            background-image: url("#{$taixiuImagePath}/#{$image}.png");
+        }
+    }
+
+    @mixin taixiuBoxShadow ($color) {  
+        box-shadow: inset 0 0px 0px  rgba(0,0,0,0),inset  0 0 22px rgba(0,0,0,0)
+            , inset 0 0 5px rgba(0,0,0,0), inset 0 0 8px rgba(0,0,0,0);
+        animation: xocdiaBoxShadow#{$color} 1s;
+        animation-iteration-count: 3;
+    }
+
+    .history-wrapper{
+        position: absolute;
+        left : calc(50% - 425px);
+        top : 0px;
+        width: 850px;
+        height: 158px;
+        overflow : hidden;
+    }
+    .history{
+        position: absolute;
+        right : calc(50px - 100%);
+        top : 0px;
+        width: 100%;
+        height: 100%;
+        background-image:  url('#{$taixiuImagePath}history-table.png');
+        transition : right 0.3s;
+        cursor : pointer;
+        &.active{ 
+            right : 0;
+        }
+        .history-item{
+            position: absolute;
+            @include taixiuBoxShadow(fec52e);
+            width: 50px;
+            box-sizing: content-box;
+            height: 100%;
+            @for $i from 1 through 15{
+                &:nth-child(#{$i}){
+                    top : 0;
+                    left : 50px + ($i - 1) * 50px;
+                }
+            }
+
+            .history-item-number{
+                border-radius: 15px;
+                height: 30px;
+                width: 30px;
+                line-height: 30px;
+                text-align: center;
+                position: absolute;
+                bottom : 30px;
+                left : calc(50% - 15px);
+                box-sizing: border-box;
+                border : 1px solid #bff2ff;
+                color: #bff2ff;
+            }
+            .history-item-type{
+                bottom : 0;
+                left : 0;
+                width: 100%;
+                text-align: center;
+                position : absolute;
+                &.tai:after{
+                    content: "Tài";
+                    color: #00ccff;
+                }
+                &.xiu:after{
+                    content: "Xỉu";
+                    color: #ffde00;
+                }
+            }
+            .history-item-dices{
+                top : 10px;
+                right : 0px;
+                width: 100%;
+                text-align: center;
+                height : 100%;
+                position : absolute;
+                .history-item-dice{
+                    width: 27px;
+                    height: 27px;
+                    margin: 0 auto;
+                    background-size: cover;
+                }
+            }
+        }
+    }
+
+    @mixin taixiuBoxShadow ($color) {  
+        box-shadow: inset 0 0px 0px  rgba(0,0,0,0),inset  0 0 22px rgba(0,0,0,0)
+            , inset 0 0 5px rgba(0,0,0,0), inset 0 0 8px rgba(0,0,0,0);
+        animation: taixiuBoxShadow#{$color} 1s;
+        animation-iteration-count: 3;
+    }
+    .gameCanvas{
+        top : 0;
+        left : 0;
+        position: absolute;
+    }
+    .total-table{
+        width: 180px;
+        height: 80px;
+        box-sizing: border-box;
+        border : 1px solid #116d91;
+        border-radius: 3px;
+        position: absolute;
+        bottom: 10px;
+        right: 180px;
+        font-size : 24px;
+        color : #bff2ff;
+        line-height : 39px;
+        &:before{
+            height: 1px;
+            content: "";
+            background-color: rgba(0,255,234, 0.1);
+            width: 100%;
+            position: absolute;
+            top : 40px;
+            left: 0;
+        }
+        .total-table-betting{
+            text-indent : 10px;
+            &:before{
+                content: "Tổng: ";
+            }
+        }
+        .total-table-win{
+            text-indent : 10px;
+            &:before{
+                content: "Thắng: ";
+            }
+        }
+    }
+    .host-wrapper{
+        .host-background{
+            position: absolute;
+            background-color: rgba(0,0,0,0.7);
+            width: 100%;
+            height: 100%;
+            top : 0;
+            left: 0;
+            display: none;
+        }
+        .host{
+            width : 100%;
+            height : 100%;
+            position : absolute;
+            top : 0;
+            /*left : calc(50% - 74px);*/
+            left : 0;
+            font-size: 16px;
+            color: white;
+            z-index : 2;
+            .host-name{
+                width: 162px;
+                height: 31px;
+                position: absolute;
+                top : 90px;
+                left : calc(50% - 81px);
+                border-radius: 6px;
+                line-height: 31px;
+                font-weight: bold;
+                background-color: rgba(0,0,0,0.5);
+                text-align: center;
+                display: none;
+                &.active{
+                    display: block;
+                    @include taixiuBoxShadow(fec52e);
+                }
+            }
+            .chat-box{
+                position: absolute;
+                width: 1222px;
+                height: 80px;
+                left : calc(50% - 611px);
+                bottom : 66px;
+                &:after, &:before{
+                    width: 100%;
+                    height: 5px;
+                    content: "";
+                    left : 0px;
+                    position: absolute;
+                }
+                &:after{
+                    bottom: 0;
+                }
+                &:before{
+                    top: 0;
+                }
+                .chat-box-inner{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    color: #ffcf00;
+                    font-weight: bold;
+                    font-size: 36px;
+                }
+            }
+        }
+    }
+    .list-player{
+        background-image:  url('#{$taixiuImagePath}players.png');
+        position: absolute;
+        width: 68px;
+        height: 68px;
+        left : 95px;
+        top : 20px;
+        cursor: pointer;
+        color: #ffde00;
+        font-size: 20px;    
+        align-items: flex-end;
+        display: flex;
+        justify-content: center;
+        line-height: 33px;
+    }
+    .table, .over-table, .vitual-table{
+        position: absolute;
+        width: 1235px;
+        height: 444px;
+        top : 173px;
+        left: calc(50% - 617.5px); 
+        box-sizing: border-box;
+        border-radius: 3px;
+        background-color: rgba(21,27,52,0.5);
+        border : 2px solid rgba(30,83,127,1);
+    }
+    .over-table{
+        background-color: transparent;
+    }
+    .vitual-table{
+        background-color: transparent;
+        border-color: transparent;
+    }
+    .betting-position{
+        box-sizing: content-box;
+        position: absolute;
+        min-width: 75px;
+        min-height: 75px;
+        border : 5px solid #194a72;
+        &.type-1{
+            .name{
+                width: 103px;
+                height: 31px;
+                top : 10px;
+                left: calc(50% - 51.5px);
+            }
+        }
+        &.type-2{
+            .name{
+                width: 130px;
+                height: 30px;
+                top : 10px;
+                left: calc(50% - 65px);
+            }
+        }
+        &.type-3{
+            .name{
+                font-size: 48px;
+                color : #fedc32;
+                top: 20px;
+                width: 100%;
+                left : 0;
+                font-weight: bold;
+            }
+            .ratio{
+                bottom: 50px;
+                font-size: 30px;
+                color : #2776a4;
+                font-weight: bold;
+                top : initial;
+            }
+            &:after{
+                content: "4 - 10";
+                position: absolute;
+                width: 94px;
+                line-height: 30px;
+                line-height: 30px;
+                font-size: 20px;
+                border: 1px solid #2776a4;
+                color : #2776a4;
+                top: 85px;
+                border-radius: 5px;
+                text-align: center;
+                left: calc(50% - 47px);
+            }
+            &.type-id15{
+                .name:before{
+                    color: #00ccff;
+                } 
+                &:after{
+                    content: "11 - 17";
+                } 
+            }
+        }
+        &.type-4{
+            .name{
+                font-size: 30px;
+                color : #fedc32;
+                top: 7px;
+                width: 50%;
+                left : 0;
+                font-weight: bold;
+            }
+            .ratio{
+                top: 15px;
+                width: 50%;
+                left : 50%;
+            }
+        }
+        &.type-7{
+            .name{
+                color : #00ccff;
+            }
+        }
+        &.type-5{
+            .name{
+                font-size: 16px;
+                color : white;
+                top: 5px;
+                width: 35px;
+                height: 35px;
+                left : 10px;
+                top : 13px;
+                font-weight: bold;
+            }
+            .ratio{
+                top: 15px;
+                width: 50%;
+                left : 50%;
+            }
+        }
+        &.type-6{
+            .name{
+                font-size: 30px;
+                color : #00ccff;
+                top: 7px;
+                width: 50%;
+                left : 0;
+                font-weight: bold;
+            }
+            .ratio{
+                top: 15px;
+                width: 50%;
+                left : 50%;
+            }
+        }
+        &.type-top{
+            border-top :none;
+        }
+        &.type-left{
+            border-left :none;
+        }
+        &.type-right{
+            border-right :none;
+        }
+        &.type-bottom{
+            border-bottom :none;
+        }
+        &.type-bottom-left{
+            border-bottom-left-radius: 3px;
+        }
+        &.type-bottom-right{
+            border-bottom-right-radius: 3px;
+        }
+        &.type-top-left{
+            border-top-left-radius: 3px;
+        }
+        &.type-top-right{
+            border-top-right-radius: 3px;
+        }
+        &.selected{
+            box-shadow: inset 0 0 5px orange, inset 0 0 10px orange;
+        }
+        &.active{
+            animation: taixiuBoxShadow 1s;
+            animation-iteration-count: infinite;
+            /*background-color: #5e6dc9;*/
+        }
+        &.disabled{
+            opacity: 0.3;
+        }
+        .ratio{
+            position: absolute;
+            font-size: 20px;
+            color: #42a3d9;
+            font-weight: normal;
+            display: inline-flex;
+            top: 45px;
+            width: 100%;
+            justify-content: center;
+            &:before{
+                content: "1:"
+            }
+        }
+        @each $id, $name in ((7,'Xỉu'),(8,'4'),(9,'5'),(10,'6'),(11,'7'),(12,'8'),(13,'9'),(14,'10'),
+        (15,'Tài'),(16,'11'),(17,'12'),(18,'13'),(19,'14'),(20,'15'),(21,'16'),(22,'17'),(23,'Chẵn'),(30,'Lẻ')){
+            &.type-id#{$id}{
+                .name:before{
+                    content : "#{$name}"
+                }
+            }
+        }
+        .name{
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .betting-number-wrapper{
+            bottom : 0px;
+            width: 100%;
+            left : 0;
+            font-size: 18px;
+            height: 35px;
+            line-height: 35px;
+            position : absolute;
+            text-align : center;
+            background-color : rgba(0,0,0,0.17);
+            &:after{
+                content: "";
+                position: absolute;
+                width: 2px;
+                height: 100%;
+                left: calc(50% - 1px);
+                top : 0;
+                background-color: rgba(0,255,234,0.1);
+            }
+            .mine-betting, .total-betting{
+                position: absolute;
+                width: 50%;
+                bottom: 0;
+                justify-content: center;
+                align-items: center;
+                display: inline-flex;
+                box-sizing: border-box;
+            }
+            .mine-betting{
+                right : 0;
+                color : #ffde00;    
+                font-weight: bold;
+            }
+            .total-betting{
+                left : 0;
+                color : #4494c2;
+            }
+        }
+    }
+
+    .vitual-betting-position{
+        position: absolute;
+        height: 115px;
+        width: 160px;
+        top : 140px;
+        cursor : pointer;
+        &.small-vitual-betting{
+            top : 290px;
+            width: 110px;
+        }
+    }
+
+    @each $code, $left in $positionList {
+        .betting#{$code}{
+            left : $left + px;
+        }
+    }
+    .profile{
+        position: absolute;
+        left: 10px;
+        top : 620px;
+        height : 100px;
+        background-color : rgba(0,0,0,0.8);
+        border-radius : 50px;
+        border-top-right-radius : 10px;
+        border-bottom-right-radius : 10px;
+        width : 300px;
+        .profile-left{
+            position: absolute;
+            top  : 0px;
+            left: 100px;
+            width: 200px;
+            font-size : 20px;
+            white-space : nowrap;
+            height : 100%;
+            display : flex;
+            justify-content: center;
+            align-items: center;
+            text-align : center;
+            &:after,&:before{
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                @include linear-gradient(left, transparent, rgba(255,255,255,0.3), transparent);
+                top : 20px;
+                left : 0;
+                content: "";
+            }
+            &:before{
+                top : initial;
+                bottom: 15px;
+            }
+            .username{
+                color : white;
+                font-weight: bold;
+            }
+            .money{
+                color: #ffc200;
+                font-size : 18px;
+                &:after{
+                    content: " V"
+                }
+            }
+        }
+        .profile-right{
+            position: absolute;
+            top  : 7px;
+            left: 7px;
+            .avatar{
+                width: 86px;
+                height: 86px;
+                background-color: rgba(0, 0, 0, 0.5);
+                border-radius: 50%;
+                overflow: hidden;
+                background-size: cover;
+                background-position: center;
+                box-sizing: border-box;
+                background-origin: content-box;
+                background-repeat: none;
+                background-clip: content-box;
+            }
+        }
+        .change-money{
+            position: absolute;
+            color: red;
+            font-size: 34px;
+            text-align: center;
+            width: 200px;
+            left : 0;
+            text-shadow: 2px 0 2px #000, -2px 0 2px #000, 0 2px 2px #000, 0 -2px 2px #000, 
+                1px 1px 2px #000, -1px -1px 2px #000, 1px -1px 2px #000,-1px 1px 2px #000;  
+            top : 50px;
+            @include animation-name(win-money);
+            @include animation-duration(2s);
+            @include animation-timing-function(linear);
+            @include animation-iteration-count(1);
+            @keyframes win-money { 
+                to {
+                    top : -50px;
+                }
+            }
+            &.plus{
+                color : #f8ae00;
+                &:before{
+                    content: "+"
+                }
+            }
+        }
+    }
+
+
+    .chip-group{
+        position: absolute;
+        top : 633px;
+        width: 100%;
+        text-align: center;
+        $size : 86px;
+        .chip{
+            position: absolute;
+            top: 0;
+            width : $size;
+            height : $size;
+            line-height:  $size;
+            border-radius : 50%;
+            background-image: url('#{$taixiuImagePath}1st-chip.png');
+            background-size : cover;
+            box-sizing: border-box;
+            background-origin: border-box;
+            color : white;
+            transition : all 0.1s linear;
+            font-size : 27px;
+            cursor : pointer;
+            font-weight : bold;
+            opacity : 0.5;
+            $seperator : 30px;
+            $indexLeft : 640px - $size * 2 - 1.5 * $seperator;
+            $distanceUnit : $size + $seperator;
+            $activeLeft : 6px;
+            &:first-child{
+                $currentLeft : $indexLeft;
+                left : $currentLeft;
+                background-image: url('#{$taixiuImagePath}1st-chip.png');
+            }
+            &:nth-child(2){
+                $currentLeft : $indexLeft + $distanceUnit;
+                left : $currentLeft;
+                background-image: url('#{$taixiuImagePath}2nd-chip.png');
+            }
+            &:nth-child(3){
+                $currentLeft : $indexLeft + $distanceUnit*2;
+                left : $currentLeft;
+                background-image: url('#{$taixiuImagePath}3rd-chip.png');
+            }
+            &:nth-child(4){
+                $currentLeft : $indexLeft + $distanceUnit*3;
+                left : $currentLeft;
+                background-image: url('#{$taixiuImagePath}4th-chip.png');
+            }
+            &.active{
+                top : -15px;
+                opacity: 1;
+                border : 2px solid #ffed8a;
+                box-shadow: 0 0 12px rgba(254,197,46, 0.68), 0 0 48px rgba(254,197,46, 0.38), 0 0 35px rgba(252,45,28, 0.24),0 3px 4px rgba(0,0,0, 0.78);
+            }
+        }
+    }
+
+    .taixiu-button-bar{
+        bottom : 0px;
+        right : 0;
+        width : 100%;
+        .button{
+            display: none;
+            right: 15px;
+            color : #835238;
+            font-size: 24px;
+            width: 145px;
+            height: 50px;
+            box-sizing: content-box;
+            background-color: #ffde00;
+            line-height: 50px;
+            position: absolute;
+            top : initial;
+        }
+        .button-bottom{
+            bottom: 10px;
+        }
+        .button-top{
+            bottom: 70px;
+        }
+    }
+    .sell-popup{
+        position: absolute;
+        top : 0;
+        left : 0;
+        width: 100%;
+        height: 100%;
+        display : flex;
+        align-items: center;
+        justify-content: center;
+        .sell-popup-background{
+            position: absolute;
+            top : 0;
+            left : 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0,0,0.5);
+        }
+        .sell-popup-center{
+            width: 480px;
+            height: 280px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border : 1px solid #2fa5d2;
+            box-shadow: 0 0 1px #1c92c4, 0 0 1px #1c92c4;
+            background-color: #29323f;
+            position: relative;
+        }
+        .sell-popup-title{
+            height: 50px;
+            position: relative;
+            background-color: #4d8fd1;
+            color : #c6e2fe;
+            font-size: 18px;
+            line-height: 50px;
+            text-align: center;
+            text-transform: uppercase;
+            &:before{
+                content : 'Bán cửa '
+            }
+        }
+        .sell-popup-close{
+            position: absolute;
+            top : 10px;
+            left : 10px;
+            font-weight: 100;
+        }
+        .sell-popup-content{
+            position: absolute;
+            top : 100px;
+            width: 100%;
+            left : 0;
+            height: 80px;
+            font-size : 18px;
+            color: #fedc32;
+            .sell-popup-minus, .sell-popup-plus{
+                position: absolute;
+                top : 40px;
+                left : 10px;
+                width : 140px;
+                height: 30px;
+                text-align : center;
+                cursor : pointer;
+                &:after{
+                    content: "0 V"
+                }
+                &:before{
+                    content: "";
+                    position:absolute;
+                    right : calc(50% - 12px);
+                    top : -28px;
+                    width : 24px;
+                    height: 24px;
+                    background-image: url('#{$taixiuImagePath}minus-button.png');
+                }
+            }
+            .sell-popup-plus{
+                left : initial;
+                right : 10px;
+                &:after{
+                    content: " V";
+                }
+                &:before{
+                    background-image: url('#{$taixiuImagePath}plus-button.png');
+                }
+            }
+            .sell-popup-dragbar{
+                position: absolute;
+                top : 20px;
+                left : calc(50% - 140px);
+                height: 10px;
+                border-radius: 5px;
+                background-color: #1c2634;
+                width: 280px;
+                .sell-popup-dragbar-inner{
+                    min-width: 10px;
+                    border-radius: 5px;
+                    background-color: #ffde00;
+                    position: absolute;
+                    left : 0;
+                    top : 0;
+                    width: 0px;
+                    height: 10px;
+                }
+                .sell-popup-scroller{
+                    position: absolute;
+                    top: -6px;
+                    left : 0px;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background-image: url('#{$taixiuImagePath}2nd-chip.png');
+                    background-size: cover;
+                    box-sizing: border-box;
+                    background-origin: border-box;
+                    cursor: pointer;
+                    box-shadow : 0 0 5px rgba(254, 197, 46, 0.68), 0 0 10px rgba(254, 197, 46, 0.38), 0 0 15px rgba(252, 45, 28, 0.24);
+                    .sell-popup-scroller-content{
+                        position: absolute;
+                        top : -30px;
+                        width: 100px;
+                        text-align: center;
+                        left : -38px;
+                    }
+                }
+            }
+            .sell-popup-button-bar{
+                position: absolute;
+                top : 80px;
+                text-align: center;
+                width : 100%;
+                .sell-popup-button{
+                    display: inline-block;
+                    width: 120px;
+                    height: 40px;
+                    border-radius : 4px;
+                    line-height: 40px;
+                    background-color: #b9bfc4;
+                    color : #5d6979;
+                    cursor : pointer;
+                    &:nth-child(2){
+                        margin-left: 20px;
+                        background-color: #f0a12b;
+                        color : white;
+                    }
+                }
+            }
+        }
+    }
+}

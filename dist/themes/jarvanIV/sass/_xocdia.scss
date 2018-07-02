@@ -1,0 +1,753 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 2, 2016, 3:50:09 PM
+    Author     : TungTD
+*/
+.xocdia-wrapper{
+    $xocdiaImagePath : $twistImagePath + "xocdia/";
+    /*background-image:  url('#{$twistImagePath}Desk-bg.png');*/
+    position : absolute;
+    width: 100%;
+    height : 100%;
+
+    $positionList : (
+        (0, 241),
+        (1, 746),
+        (2, 179),
+        (3, 409),
+        (4, 639),
+        (5, 869),
+        (6, 660)
+        );
+    @mixin xocdiaTextShadow ($color) {  
+        text-shadow: 0 5px 4px rgba(0,0,0, 0.78), 0 0 22px rgba($color, 0.80)
+            , 0 0 5px rgba($color, 0.48), 0 0 8px rgba($color, 0.68);
+        color : white;
+    }
+
+    $colorList : ((#fec52e,fec52e),(#00baff,00baff));
+    @each $color,$colorName  in $colorList {
+        @include keyframes(xocdiaBoxShadow#{$colorName}) {
+            0%{
+                box-shadow: 0 0 1px #1c92c4, 0 0 1px #1c92c4;
+                @include  linear-gradient(bottom, rgba(255,238,0,0.05), rgba(255,238,0,0.02));
+            }
+            50%{box-shadow: 0 0 5px #1c92c4, 0 0 10px #1c92c4;
+                @include  linear-gradient(bottom, rgba(255,238,0,0.07), rgba(255,238,0,0.05))}
+            100%{box-shadow: 0 0 1px #1c92c4, 0 0 1px #1c92c4;
+                 @include  linear-gradient(bottom, rgba(255,238,0,0.05), rgba(255,238,0,0.02))}
+        }
+    }
+
+
+    @include keyframes(xocdiaBoxShadow) {
+        0%{box-shadow: inset 0 0 1px rgba(255,222,0,0.8)}
+        50%{box-shadow: inset 0 0 50px rgba(255,222,0,0.8)}
+        100%{box-shadow: inset 0 0 1px rgba(255,222,0,0.8)}
+    }
+
+    @mixin xocdiaBoxShadow ($color) {  
+        box-shadow: inset 0 0px 0px  rgba(0,0,0,0),inset  0 0 22px rgba(0,0,0,0)
+            , inset 0 0 5px rgba(0,0,0,0), inset 0 0 8px rgba(0,0,0,0);
+        animation: xocdiaBoxShadow#{$color} 1s;
+        animation-iteration-count: 3;
+    }
+    .gameCanvas{
+        top : 0;
+        left : 0;
+        position: absolute;
+    }
+    .history-wrapper{
+        position: absolute;
+        left : calc(50% - 425px);
+        top : 0px;
+        width: 850px;
+        height: 188px;
+        overflow : hidden;
+        .history-odd,.history-event{
+            position: absolute;
+            left : 0;
+            width: 75px;
+            text-align: center;
+            font-size: 17px;
+            color: white;
+            top : 10px;
+            &:before{
+                content: "Chẵn";
+            }
+            &:after{
+                content: "";
+                background-image: url('#{$xocdiaImagePath}white.png');
+                background-repeat: no-repeat;
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                left: calc(50% - 8px);
+                top : 27px;
+            }
+        }
+        .history-odd{
+            top : 80px;
+            &:before{
+                content: "Lẽ";
+            }
+            &:after{
+                background-image: url('#{$xocdiaImagePath}red.png');
+            }
+        }
+    }
+    .history{
+        position: absolute;
+        right : calc(50px - 100%);
+        top : 0px;
+        width: 100%;
+        height: 100%;
+        background-image:  url('#{$xocdiaImagePath}history-table.png');
+        transition : right 0.3s;
+        cursor : pointer;
+        &.active{ 
+            right : 0;
+        }
+        .result-chip-column{
+            position: absolute;
+            @for $i from 1 through 15{
+                &:nth-child(#{$i}){
+                    top : 0;
+                    left : 50px + ($i - 1) * 50px;
+                }
+            }
+        }
+        .result-chip{
+            position: absolute;
+            box-sizing: border-box;
+            width: 48px;
+            height: 45px;
+            @include xocdiaBoxShadow(fec52e);
+            .inner-chip{
+                height: 100%;
+                width: 100%;
+                background-repeat: no-repeat;
+                background-image: url('#{$xocdiaImagePath}white.png');
+                background-position: center;
+                background-repeat: no-repeat;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 14px;
+                color : black;
+                font-weight: bold;
+            }
+            &.result-chip-odd{
+                .inner-chip{
+                    color: white;
+                    background-image: url('#{$xocdiaImagePath}red.png');
+                }
+            }
+            @for $i from 1 through 4{
+                &:nth-child(#{$i}){
+                    top : ($i - 1) * 47px;
+                }
+            }
+        }
+    }
+    .total-table{
+        width: 180px;
+        height: 80px;
+        box-sizing: border-box;
+        border : 1px solid #116d91;
+        border-radius: 3px;
+        position: absolute;
+        bottom: 10px;
+        right: 180px;
+        font-size : 24px;
+        color : #bff2ff;
+        line-height : 39px;
+        &:before{
+            height: 1px;
+            content: "";
+            background-color: rgba(0,255,234, 0.1);
+            width: 100%;
+            position: absolute;
+            top : 40px;
+            left: 0;
+        }
+        .total-table-betting{
+            text-indent : 10px;
+            &:before{
+                content: "Tổng: ";
+            }
+        }
+        .total-table-win{
+            text-indent : 10px;
+            &:before{
+                content: "Thắng: ";
+            }
+        }
+    }
+    .host-wrapper{
+        .host-background{
+            position: absolute;
+            background-color: rgba(0,0,0,0.7);
+            width: 100%;
+            height: 100%;
+            top : 0;
+            left: 0;
+            display: none;
+        }
+        .host{
+            /*            width : 148px;
+                        height : 133px;*/
+            /*background-image:  url('#{$xocdiaImagePath}host.png');*/
+            width : 100%;
+            height : 100%;
+            position : absolute;
+            top : 0;
+            /*left : calc(50% - 74px);*/
+            left : 0;
+            font-size: 16px;
+            color: white;
+            z-index : 2;
+            .host-name{
+                width: 162px;
+                height: 31px;
+                position: absolute;
+                top : 90px;
+                left : calc(50% - 81px);
+                border-radius: 6px;
+                line-height: 31px;
+                font-weight: bold;
+                background-color: rgba(0,0,0,0.5);
+                text-align: center;
+                display: none;
+                &.active{
+                    display: block;
+                    @include xocdiaBoxShadow(fec52e);
+                }
+            }
+            .chat-box{
+                /*background-image:  url('#{$xocdiaImagePath}chatbox.png');*/
+                position: absolute;
+                width: 1222px;
+                height: 80px;
+                left : calc(50% - 611px);
+                bottom : 66px;
+                /*@include linear-gradient(left, transparent, rgba(18,46,73,0.8), transparent);*/
+                &:after, &:before{
+                    width: 100%;
+                    height: 5px;
+                    content: "";
+                    /*@include linear-gradient(left, transparent, rgba(19,173,171,0.8), transparent);*/
+                    left : 0px;
+                    position: absolute;
+                }
+                &:after{
+                    bottom: 0;
+                }
+                &:before{
+                    top: 0;
+                }
+                .chat-box-inner{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    color: #ffcf00;
+                    font-weight: bold;
+                    font-size: 36px;
+
+                }
+            }
+        }
+    }
+    .list-player{
+        background-image:  url('#{$xocdiaImagePath}players.png');
+        position: absolute;
+        width: 68px;
+        height: 68px;
+        left : 95px;
+        top : 20px;
+        cursor: pointer;
+        color: #ffde00;
+        font-size: 20px;    
+        align-items: flex-end;
+        display: flex;
+        justify-content: center;
+        line-height: 33px;
+    }
+    .betting-position{
+        position: absolute;
+        box-sizing: border-box;
+        border-radius: 8px;
+        background-color: rgba(255,222,0,0.036);
+        border : 2px solid rgba(255,222,0,0.2);
+        &:before{
+            content : "";
+            left: 10px;
+            top: 10px;
+            right: 10px;
+            bottom: 10px;
+            position: absolute;
+            box-sizing: border-box;
+            border-radius: 4px;
+            background-color: rgba(255,0,0,0.08);
+            border : 2px solid #ffde00;
+            box-shadow: inset 0px 0px 50px rgba(255,0,0,0.05);
+        }
+        &.selected{
+            box-shadow: 0 0 5px orange, 0 0 10px orange,0 0 15px orange;
+        }
+        &.active{
+            animation: xocdiaBoxShadow 1s;
+            animation-iteration-count: infinite;
+        }
+        &.disabled{
+            opacity: 0.3;
+        }
+        .name{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            color: #ffde00;
+            font-weight: bold;
+            position: absolute;
+            height: 60px;
+            bottom: 10px;
+            left : 10px;
+            right: 10px;
+            font-weight: bold;
+        }
+        .mine-betting, .total-betting{
+            position: absolute;
+            width: 120px;
+            max-width: 45%;
+            height: 50px;
+            right: 10px;
+            top: 10px;
+            line-height: 50px;
+            border:none;
+            color: #ffde00;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .total-betting{
+            left: 10px;
+            right: initial;
+            font-weight: normal;
+            color: #bff2ff;
+            font-size: 20px;
+        }
+
+        .coin-tittle{
+            position: absolute;
+            top : 25px;
+            right : calc(50% - 25px);
+            width: 50px;
+            text-align: center;
+        }
+        .coin-item{
+            width: 30px;
+            height: 30px;
+            background-image:  url('#{$xocdiaImagePath}white.png');
+            box-sizing: content-box;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-origin: content-box;
+            display : inline-block;
+            &.red-coin{
+                background-image:  url('#{$xocdiaImagePath}red.png');
+            }
+        }
+        &.small-betting-position{
+            background-color: transparent;
+            border : 2px solid #116d91;
+            &:before{
+                border : 2px solid #0b8e9a;
+                background-color: rgba(0,255,234,0.08);
+                box-shadow: inset 0px 0px 50px rgba(0,234,255,0.05);
+            }
+            &.selected{
+                box-shadow: 0 0 5px #1c92c4, 0 0 10px #1c92c4,0 0 15px #1c92c4,0 0 20px #1c92c4;
+            }
+
+            .coin-tittle{
+                bottom: 15px;
+                right : 15px;
+                top : initial;
+                display: flex;
+                width: calc(100% - 40px);
+                justify-content: flex-end;
+                .coin-item{
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50%;
+                    border : 3px solid #b0745f;
+                    background-color: #b0745f;
+                    margin-left: -3px;
+                    &.red-coin{
+                        border-color: #eabd90;
+                        background-color: #eabd90;
+                    }
+                }
+            }
+
+            .name{
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                font-size: 30px;
+                color: #bff2ff;
+                font-weight: bold;
+                position: absolute;
+                height: 40px;
+                bottom: 10px;
+                left : 15px;
+                right: initial;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .vitual-betting-position{
+        position: absolute;
+        height: 198px;
+        width: 294px;
+        border-radius: 99px;
+        cursor : pointer;
+        top : 176px;
+        &.small-vitual-betting{
+            height: 148px;
+            width: 218px;
+            border-radius: 74px;
+            top : 406px;
+        }
+    }
+    .profile{
+        position: absolute;
+        left: 10px;
+        top : 610px;
+        height : 100px;
+        background-color : rgba(0,0,0,0.8);
+        border-radius : 50px;
+        border-top-right-radius : 10px;
+        border-bottom-right-radius : 10px;
+        width : 300px;
+        .profile-left{
+            position: absolute;
+            top  : 0px;
+            left: 100px;
+            width: 200px;
+            font-size : 20px;
+            white-space : nowrap;
+            height : 100%;
+            display : flex;
+            justify-content: center;
+            align-items: center;
+            text-align : center;
+            &:after,&:before{
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                @include linear-gradient(left, transparent, rgba(255,255,255,0.3), transparent);
+                top : 20px;
+                left : 0;
+                content: "";
+            }
+            &:before{
+                top : initial;
+                bottom: 15px;
+            }
+            .username{
+                color : white;
+                font-weight: bold;
+            }
+            .money{
+                color: #ffc200;
+                font-size : 18px;
+                &:after{
+                    content: " V"
+                }
+            }
+        }
+        .profile-right{
+            position: absolute;
+            top  : 7px;
+            left: 7px;
+            .avatar{
+                width: 86px;
+                height: 86px;
+                background-color: rgba(0, 0, 0, 0.5);
+                border-radius: 50%;
+                overflow: hidden;
+                background-size: cover;
+                background-position: center;
+                box-sizing: border-box;
+                background-origin: content-box;
+                background-repeat: none;
+                background-clip: content-box;
+            }
+        }
+        .change-money{
+            position: absolute;
+            color: red;
+            font-size: 34px;
+            text-align: center;
+            width: 200px;
+            left : 0;
+            text-shadow: 2px 0 2px #000, -2px 0 2px #000, 0 2px 2px #000, 0 -2px 2px #000, 
+                1px 1px 2px #000, -1px -1px 2px #000, 1px -1px 2px #000,-1px 1px 2px #000;  
+            top : 50px;
+            @include animation-name(win-money);
+            @include animation-duration(2s);
+            @include animation-timing-function(linear);
+            @include animation-iteration-count(1);
+            @keyframes win-money { 
+                to {
+                    top : -50px;
+                }
+            }
+            &.plus{
+                color : #f8ae00;
+                &:before{
+                    content: "+"
+                }
+            }
+        }
+    }
+
+    .chip-group{
+        position: absolute;
+        top : 633px;
+        width: 100%;
+        text-align: center;
+        $size : 86px;
+        .chip{
+            position: absolute;
+            top: 0;
+            width : $size;
+            height : $size;
+            line-height:  $size;
+            border-radius : 50%;
+            background-image: url('#{$xocdiaImagePath}1st-chip.png');
+            background-size : cover;
+            box-sizing: border-box;
+            background-origin: border-box;
+            color : white;
+            transition : all 0.1s linear;
+            font-size : 27px;
+            cursor : pointer;
+            font-weight : bold;
+            opacity : 0.5;
+            $seperator : 30px;
+            $indexLeft : 640px - $size * 2 - 1.5 * $seperator;
+            $distanceUnit : $size + $seperator;
+            $activeLeft : 6px;
+            &:first-child{
+                $currentLeft : $indexLeft;
+                left : $currentLeft;
+                background-image: url('#{$xocdiaImagePath}1st-chip.png');
+            }
+            &:nth-child(2){
+                $currentLeft : $indexLeft + $distanceUnit;
+                left : $currentLeft;
+                background-image: url('#{$xocdiaImagePath}2nd-chip.png');
+            }
+            &:nth-child(3){
+                $currentLeft : $indexLeft + $distanceUnit*2;
+                left : $currentLeft;
+                background-image: url('#{$xocdiaImagePath}3rd-chip.png');
+            }
+            &:nth-child(4){
+                $currentLeft : $indexLeft + $distanceUnit*3;
+                left : $currentLeft;
+                background-image: url('#{$xocdiaImagePath}4th-chip.png');
+            }
+            &.active{
+                top : -15px;
+                opacity: 1;
+                border : 2px solid #ffed8a;
+                box-shadow: 0 0 12px rgba(254,197,46, 0.68), 0 0 48px rgba(254,197,46, 0.38), 0 0 35px rgba(252,45,28, 0.24),0 3px 4px rgba(0,0,0, 0.78);
+            }
+        }
+    }
+    
+    .xocdia-button-bar{
+        bottom : 0px;
+        right : 0;
+        width : 100%;
+        .button{
+            display: none;
+            right: 15px;
+            color : #835238;
+            font-size: 24px;
+            width: 145px;
+            height: 50px;
+            box-sizing: content-box;
+            background-color: #ffde00;
+            line-height: 50px;
+            position: absolute;
+            top : initial;
+        }
+        .button-bottom{
+            bottom: 10px;
+        }
+        .button-top{
+            bottom: 70px;
+        }
+    }
+    .sell-popup{
+        position: absolute;
+        top : 0;
+        left : 0;
+        width: 100%;
+        height: 100%;
+        display : flex;
+        align-items: center;
+        justify-content: center;
+        z-index : 10;
+        .sell-popup-background{
+            position: absolute;
+            top : 0;
+            left : 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0,0,0.5);
+        }
+        .sell-popup-center{
+            width: 480px;
+            height: 280px;
+            margin-bottom: 50px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border : 1px solid #2fa5d2;
+            box-shadow: 0 0 1px #1c92c4, 0 0 1px #1c92c4;
+            background-color: #29323f;
+            position: relative;
+        }
+        .sell-popup-title{
+            height: 50px;
+            position: relative;
+            background-color: #4d8fd1;
+            color : #c6e2fe;
+            font-size: 18px;
+            line-height: 50px;
+            text-align: center;
+            text-transform: uppercase;
+            &:before{
+                content : 'Bán cửa '
+            }
+        }
+        .sell-popup-close{
+            position: absolute;
+            top : 10px;
+            left : 10px;
+            font-weight: 100;
+        }
+        .sell-popup-content{
+            position: absolute;
+            top : 100px;
+            width: 100%;
+            left : 0;
+            height: 80px;
+            font-size : 18px;
+            color: #fedc32;
+            .sell-popup-minus, .sell-popup-plus{
+                position: absolute;
+                top : 40px;
+                left : 10px;
+                width : 140px;
+                height: 30px;
+                text-align : center;
+                cursor : pointer;
+                &:after{
+                    content: "0 V"
+                }
+                &:before{
+                    content: "";
+                    position:absolute;
+                    right : calc(50% - 12px);
+                    top : -28px;
+                    width : 24px;
+                    height: 24px;
+                    background-image: url('#{$xocdiaImagePath}minus-button.png');
+                }
+            }
+            .sell-popup-plus{
+                left : initial;
+                right : 10px;
+                &:after{
+                    content: " V";
+                }
+                &:before{
+                    background-image: url('#{$xocdiaImagePath}plus-button.png');
+                }
+            }
+            .sell-popup-dragbar{
+                position: absolute;
+                top : 20px;
+                left : calc(50% - 140px);
+                height: 10px;
+                border-radius: 5px;
+                background-color: #1c2634;
+                width: 280px;
+                .sell-popup-dragbar-inner{
+                    min-width: 10px;
+                    border-radius: 5px;
+                    background-color: #ffde00;
+                    position: absolute;
+                    left : 0;
+                    top : 0;
+                    width: 0px;
+                    height: 10px;
+                }
+                .sell-popup-scroller{
+                    position: absolute;
+                    top: -6px;
+                    left : 0px;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background-image: url('#{$xocdiaImagePath}2nd-chip.png');
+                    background-size: cover;
+                    box-sizing: border-box;
+                    background-origin: border-box;
+                    cursor: pointer;
+                    box-shadow : 0 0 5px rgba(254, 197, 46, 0.68), 0 0 10px rgba(254, 197, 46, 0.38), 0 0 15px rgba(252, 45, 28, 0.24);
+                    .sell-popup-scroller-content{
+                        position: absolute;
+                        top : -30px;
+                        width: 100px;
+                        text-align: center;
+                        left : -38px;
+                    }
+                }
+            }
+            .sell-popup-button-bar{
+                position: absolute;
+                top : 80px;
+                text-align: center;
+                width : 100%;
+                .sell-popup-button{
+                    display: inline-block;
+                    width: 120px;
+                    height: 40px;
+                    border-radius : 4px;
+                    line-height: 40px;
+                    background-color: #b9bfc4;
+                    color : #5d6979;
+                    cursor : pointer;
+                    &:nth-child(2){
+                        margin-left: 20px;
+                        background-color: #f0a12b;
+                        color : white;
+                    }
+                }
+            }
+        }
+    }
+}
